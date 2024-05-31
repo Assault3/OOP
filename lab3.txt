@@ -1,0 +1,180 @@
+#include <iostream>
+using namespace std;
+
+
+class Rectangle
+{
+	double length;
+	double width;
+
+public:
+
+	Rectangle()
+	{
+		length = 1;
+		width = 1;
+	}
+
+	Rectangle(double length, double width)
+	{
+		this->length = length;
+		this->width = width;
+	}
+
+	double GetArea()
+	{
+		return length * width;
+	}
+
+	double GetPerimeter()
+	{
+		return 2 * (length + width);
+	}
+
+	double GetLength()
+	{
+		return length;
+	}
+
+	double GetWidth()
+	{
+		return width;
+	}
+
+	void SetLength(double length)
+	{
+		this->length = length;
+	}
+
+	void SetWidth(double width)
+	{
+		this->width = width;
+	}
+};
+
+
+class Square : public Rectangle
+{
+public:
+	Square():Rectangle()
+	{
+	}
+
+	Square(double side):Rectangle(side, side)
+	{
+	}
+};
+
+
+class Point2D
+{
+	int x;
+	int y;
+public:
+	Point2D()
+	{
+		x = 0;
+		y = 0;
+	}
+
+	Point2D(int x, int y)
+	{
+		this->x = x;
+		this->y = y;
+	}
+	
+	int GetX()
+	{
+		return x;
+	}
+
+	int GetY()
+	{
+		return y;
+	}
+
+	int* GetXY()
+	{
+		int* arr = new int[2];
+		arr[0] == x;
+		arr[1] == y;
+		return arr;
+	}
+
+	void SetX(int x)
+	{
+		this->x = x;
+	}
+
+	void SetY(int y)
+	{
+		this->y = y;
+	}
+
+	void SetXY(int x, int y)
+	{
+		this->x = x;
+		this->y = y;
+	}
+};
+
+
+class Point3D:public Point2D
+{
+	int z;
+public:
+	Point3D()
+	{
+		z = 0;
+	}
+
+	Point3D(int x, int y, int z):Point2D(x, y)
+	{
+		this->z = z;
+	}
+
+	int GetZ()
+	{
+		return z;
+	}
+
+	int* GetXYZ()
+	{
+		int* arr = new int[3];
+		arr[0] = GetX();
+		arr[1] = GetY();
+		arr[2] = z;
+		return arr;
+	}
+
+	void SetZ(int z)
+	{
+		this->z = z;
+	}
+
+	void SetXYZ(int x, int y, int z)
+	{
+		SetX(x);
+		SetY(y);
+		this->z = z;
+	}
+};
+
+
+int main()
+{
+	Square s1;
+	Square s2(8);
+	cout << s1.GetArea() << endl << s2.GetArea() << endl;
+
+	Point3D p1;
+	p1.SetXYZ(1, 2, 3);
+	int* res1 = p1.GetXYZ();
+	for (int i = 0; i < 3; i++)
+	{
+		cout << res1[i] << " ";
+	}
+
+	delete[] res1;
+	return 0;
+}

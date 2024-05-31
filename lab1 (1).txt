@@ -1,0 +1,135 @@
+#include <iostream>
+#include <stdlib.h>
+#include <time.h>
+using namespace std;
+
+int* arr = new int[10];
+int len(10);
+int el(0);
+
+
+void add(int data)
+{
+	if (el == len)
+	{
+		int* temp = new int[len * 2];
+
+		for (int i = 0; i < len; i++)
+		{
+			temp[i] = arr[i];
+		}
+		len *= 2;
+		delete[] arr;
+		arr = temp;
+	}
+	arr[el] = data;
+	//arr[data] = data + 1;
+}
+
+
+void resize()
+{
+	while (len > 20 && 2 * el <= len)
+	{
+		len /= 2;
+	}
+
+	int* temp = new int[len];
+	for (int i = 0; i < el; i++)
+	{
+		temp[i] = arr[i];
+	}
+
+	delete[] arr;
+	arr = temp;
+}
+
+
+void remove_duplicates()
+{
+	int* temp = new int[len];
+	temp[0] = arr[0];
+	bool cheack;
+	el = 1;
+	
+	for (int i = 1; i < 100; i++)
+	{
+		cheack = true;
+		for (int j = 0; j < el; j++)
+		{
+			if (arr[i] == temp[j])
+			{
+				cheack = false;
+				break;
+			}
+		}
+
+		if (cheack == true)
+		{
+			temp[el] = arr[i];
+			el++;
+		}
+	}
+
+	delete[] arr;
+	arr = temp;
+
+	resize();
+}
+
+
+void remove(int index)
+{
+	for (int i = index;i < el; i++)
+	{
+		arr[i] = arr[i + 1];
+	}
+	arr[el - 1] = -1;
+	el--;
+
+	resize();
+}
+
+
+int main()
+{
+	srand(time(NULL));
+
+	for (int i = 0; i < 100; i++)
+	{
+		add(rand() % 100 + 1);
+		el++;
+	}
+
+	for (int i = 0; i < el; i++)
+	{
+		cout << arr[i] << " ";
+	}
+
+	cout << endl << "______________________________________________" << endl;
+
+	remove_duplicates();
+
+	for (int i = 0; i < el; i++)
+	{
+		cout << arr[i] << " ";
+	}
+
+	cout << endl << "______________________________________________" << endl;
+	
+	int n;
+	cout << "Enter index: ";
+	cin >> n;
+	remove(n);
+
+	for (int i = 0; i < el; i++)
+	{
+		cout << arr[i] << " ";
+	}
+
+	cout << endl << "Array size: " << _msize(arr) / sizeof(int);
+
+
+	delete[] arr;
+	return 0;
+}

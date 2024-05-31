@@ -1,0 +1,219 @@
+#include <iostream>
+#include <array>
+#include <cmath>
+using namespace std;
+
+
+class Author
+{
+    string name;
+    string email;
+    int age;
+public:
+    
+    Author()
+    {
+        name = "None";
+        email = "None";
+        age = 0;
+    }
+
+    Author(string name, string email, int age)
+    {
+        this->name = name;
+        this->email = email;
+        this->age = age;
+    }
+
+    string GetName()
+    {
+        return name;
+    }
+
+    string GetEmail()
+    {
+        return email;
+    }
+
+    int GetAge()
+    {
+        return age;
+    }
+
+    void SetEmail(string email)
+    {
+        this->email = email;
+    }
+
+    void SetAge(int age)
+    {
+        this->age = age;
+    }
+};
+
+
+class Book
+{
+    string name;
+    array<Author,2> authors;
+    int price;
+public:
+    Book(string name, array<Author,2>& authors, int price)
+    {
+        this->name = name;
+        this->authors = authors;
+        this->price = price;
+    }
+
+    void SetPrice(int price)
+    {
+        this->price = price;
+    }
+
+    string GetName()
+    {
+        return name;
+    }
+
+    int GetPrice()
+    {
+        return price;
+    }
+
+    array<Author, 2> GetAuthors()
+    {
+        return authors;
+    }
+
+    string GetAuthorNames()
+    { 
+
+        string res = "";
+        for (int i = 0; i < 2; i++)
+        {
+            res = res + authors[i].GetName();
+            if (i != 1)
+            {
+                res += ", ";
+            }
+        }
+        res += "\n";
+        return res;
+
+    }
+};
+
+
+class Point
+{
+    double x;
+    double y;
+public:
+    Point()
+    {
+        x = 0;
+        y = 0;
+    }
+
+    Point(double x, double y)
+    {
+        this->x = x;
+        this->y = y;
+    }
+
+    double GetX()
+    {
+        return x;
+    }
+
+    double GetY()
+    {
+        return y;
+    }
+
+    void SetX(double x)
+    {
+        this->x = x;
+    }
+
+    void SetY(double y)
+    {
+        this->y = y;
+    }
+
+    double GetDistanceTo(Point& another)
+    {
+        return sqrt(pow(x - another.GetX(), 2) + pow(y - another.GetY(), 2));
+    }
+};
+
+
+class Rectangle
+{
+    Point bl;
+    Point tr;
+public:
+    Rectangle()
+    {
+        bl.SetX(0);
+        bl.SetY(0);
+        tr.SetX(1);
+        tr.SetY(1);
+    }
+
+    Rectangle(double x1, double y1, double x2, double y2)
+    {
+        bl.SetX(x1);
+        bl.SetY(y1);
+        tr.SetX(x2);
+        tr.SetY(y2);
+    }
+
+    Point GetBL()
+    {
+        return bl;
+    }
+
+    Point GetTR()
+    {
+        return tr;
+    }
+
+    double GetArea()
+    {
+        return (tr.GetX() - bl.GetX()) * (tr.GetY() - bl.GetY());
+    }
+
+    double GetPerimert()
+    {
+        return 2 *  ((tr.GetX() - bl.GetX()) + (tr.GetY() - bl.GetY()));
+    }
+
+    double GetDistanceTo(Rectangle another)
+    {
+        Point c1((bl.GetX() + tr.GetX()) / 2, (bl.GetY() + tr.GetY()) / 2);
+        Point c2((another.GetBL().GetX() + another.GetTR().GetX()) / 2, 
+            (another.GetBL().GetY() + another.GetTR().GetY()) / 2);
+        return c1.GetDistanceTo(c2);
+    }
+};
+
+
+
+int main()
+{
+    Author author1("Dias", "34333@iitu.edu.kz", 19);
+    Author author2("Assau", "34039@iitu.edu.kz", 19);
+    array<Author, 2>authors = { author1, author2 };
+    Book book1("OOP", authors, 1000);
+    cout << book1.GetAuthorNames();
+
+
+    Rectangle r1(1, 2, 5, 6);
+    cout << r1.GetArea() << " " << r1.GetPerimert() << endl;
+    Rectangle r2(8, 6, 10, 8);
+    cout << r2.GetArea() << " " << r2.GetPerimert() << endl;
+    cout << r1.GetDistanceTo(r2);
+
+    return 0;
+}

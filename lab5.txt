@@ -1,0 +1,239 @@
+#include<iostream>
+#include<cmath>
+using namespace std;
+
+class Matrix {
+    int n, m;
+    int** arr;
+    int data;
+    double Det()
+    {
+        if (this->n == 2)
+        {
+            return this->arr[0][0] * this->arr[1][1] - this->arr[0][1] * this->arr[1][0];
+        }
+
+        Matrix temp(this->n - 1, this->m - 1);
+        int J, res;
+        res = 0;
+        for (int index = 0; index < this->m; index++)
+        {
+            for (int i = 1; i < this->n; i++)
+            {
+                J = 0;
+                for (int j = 0; j < this->m; j++)
+                {
+                    if (j == index)
+                    {
+                        continue;
+                    }
+                    temp.arr[i - 1][J] = this->arr[i][j];
+                    J++;
+                }
+            }
+            res += pow(-1, index) * arr[0][index] * temp.Det();
+        }
+        return res;
+    }
+public:
+    Matrix(int n, int m) {
+        this->n = n;
+        this->m = m;
+        this->data = 0;
+        this->arr = new int* [n];
+        for (int i = 0; i < n; i++)
+            arr[i] = new int[m];
+
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = 0; j < m; j++)
+            {
+                arr[i][j] = data;
+            }
+        }
+    }
+
+
+    Matrix(int n, int m, int data) {
+        this->n = n;
+        this->m = m;
+        this->data = data;
+        this->arr = new int* [n];
+        for (int i = 0; i < n; i++)
+            arr[i] = new int[m];
+
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = 0; j < m; j++)
+            {
+                arr[i][j] = data;
+            }
+        }
+    }
+
+
+    Matrix(const Matrix& another)
+    {
+        this->n = another.n;
+        this->m = another.m;
+        this->data = another.data;
+
+        this->arr = new int*[another.n];
+        for (int i = 0; i < another.n; i++)
+        {
+            this->arr[i] = new int[another.m];
+        }
+
+        for (int i = 0; i < another.n; i++)
+        {
+            for (int j = 0; j < another.m; j++)
+            {
+                this->arr[i][j] = another.arr[i][j];
+            }
+        }
+    }
+
+
+    Matrix operator + (const Matrix& another) {
+        if (this->n == another.n && this->m == another.m)
+        {
+            Matrix C(n, m);
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < m; j++) {
+                    C.arr[i][j] = this->arr[i][j] + another.arr[i][j];
+                }
+            }
+            return C;
+        }
+    }
+
+
+    Matrix operator - (Matrix another) {
+        if (n == another.n && m == another.m)
+        {
+            Matrix C(n, m);
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < m; j++) {
+                    C.arr[i][j] = this->arr[i][j] - another.arr[i][j];
+                }
+            }
+            return C;
+        }
+    }
+
+
+    Matrix operator * (Matrix another) {
+        if (m == another.n) {
+            Matrix C(n, another.m);
+            for (int i = 0; i < n; i++)
+            {
+                for (int j = 0; j < another.m; j++)
+                {
+                    for (int k = 0; k < m; k++)
+                    {
+                        C.arr[i][j] += this->arr[i][k] * another.arr[k][j];
+                    }
+                }
+            }
+            return C;
+        }
+        Matrix C(n, m);
+        return C;
+    }
+
+
+    bool operator == (Matrix another)
+    {
+        if (n == another.n && m == another.m)
+        {
+            for (int i = 0; i < n; i++)
+            {
+                for (int j = 0; j < m; j++)
+                {
+                    if (arr[i][j] != another.arr[i][j])
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
+    
+    bool operator != (Matrix another)
+    {
+        return !(*this == another);
+    }
+
+
+    int* operator [](int index)
+    {
+        return arr[index];
+    }
+
+
+    double operator () ()
+    {
+        if (this ->n == this-> m)
+        {
+            return this->Det();
+        }
+    }
+
+
+    friend ostream& operator<<(ostream& out, Matrix matrix) {
+        for (int i = 0; i < matrix.n; i++) {
+            for (int j = 0; j < matrix.m; j++) {
+                out << matrix.arr[i][j] << " ";
+            }
+            out << endl;
+        }
+        return out;
+    }
+
+
+    friend istream& operator>>(istream& in, Matrix& matrix) {
+        for (int i = 0; i < matrix.n; i++) {
+            for (int j = 0; j < matrix.m; j++) {
+                in >> matrix.arr[i][j];
+            }
+        }
+        return in;
+    }
+
+
+    ~Matrix() {
+        for (int i = 0; i < n; i++)
+            delete[] arr[i];
+        delete[] arr;
+    }
+private:
+
+};
+
+
+int main() {
+    Matrix A(3, 3), B(3, 3, 3);
+
+    cin >> A;
+    //cin >> B;
+    cout << "\nMatrix A:\n" << A;
+    cout << "\nMatrix B:\n" << B;
+    cout << "\nA + B:\n" << A + B;
+    cout << "\nA - B:\n" << A - B;
+    cout << "\nA * B:\n" << A * B;
+    if (A == B)
+    {
+        cout << "A == B\n";
+    }
+    else if (A != B)
+    {
+        cout << "A != B\n";
+    }
+    cout << "A[0][0]:\t " << A[0][0];
+    cout << "\nDetA:\t" << A();
+    //todo List: operator: >>, <<, +, -, *, ==, !=, [], () - determinant
+    return 0;
+}
